@@ -179,7 +179,7 @@ This is a project done for the Programming Applications and Frameworks module of
 * IT19188928 - M.M. Saluka Udbhasa - [salukadev](https://github.com/salukadev)
 * IT19142838 - B.W.E.K. Senarathna - [Esala-Senarathna](https://github.com/Esala-Senarathna)
 * IT19001708 - L.L.P.S.M. Lelkada  - [pLe98](https://github.com/pLe98)
-* IT19956954  - U.W.D.G.B. Udupihilla  - [pLe98](https://github.com/pLe98)
+* IT19956954  - U.W.D.G.B. Udupihilla  - [deshanudu](https://github.com/deshanudu)
 
 
 
