@@ -24,6 +24,8 @@ public class Payment {
 		 //String query = " insert into items(`itemID`,`itemCode`,`itemName`,`itemPrice`,`itemDesc`)"+ " values (?, ?, ?, ?, ?)";
 		 String query = " insert into payments values (0,?, ?, ?, ?, ?, ?)";
 		 PreparedStatement preparedSt = con.prepareStatement(query);
+		 
+		 //Prepare sql timestamp
 		 final java.util.Date today = new java.util.Date();
 	   	 final java.sql.Timestamp todaySQL = new java.sql.Timestamp(today.getTime());
 		 
