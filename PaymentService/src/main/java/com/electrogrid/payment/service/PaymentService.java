@@ -30,6 +30,7 @@ public class PaymentService
 		return "Hello world!";
 	 }
 	
+	//
 	@POST
 	@Path("/pay")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -58,8 +59,11 @@ public class PaymentService
 	public String getLastTransaction() throws JsonProcessingException
 	{
 		Payment pay = new Payment();
+		pay.getLastTransaction();
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		String response = objectMapper.writeValueAsString(pay);
+		System.out.println(response);
 		return response;
 	}
 	

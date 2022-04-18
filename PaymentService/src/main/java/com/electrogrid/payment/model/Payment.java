@@ -20,7 +20,7 @@ public class Payment {
 	
 	static Connection con = DBConnectionSingleton.getConnection();
 	
-	
+	//insert item method
 	public String insertItem(int bill, int user, String type, float amount)
 	 {
 		String output = "";
@@ -60,6 +60,7 @@ public class Payment {
 	 	return output;
 	 }
 	
+	//save object to the db
 	public String save()
 	 {
 		String output = "";
@@ -109,6 +110,40 @@ public class Payment {
 	 	return output;
 	 }
 
+	//get last transaction
+	public void getLastTransaction() {
+		try
+		 {
+			 if (con == null)
+			 {return; }
+		 
+			 // create a statement and execute query
+			 String query = " SELECT * FROM payments ORDER BY id DESC LIMIT 1;";
+			 Statement st = con.createStatement(); 
+			 ResultSet rs = st.executeQuery(query);
+			 
+			 while (rs.next())
+		      {
+		        this.transId = rs.getInt("id");
+		        this.dTime  = rs.getTimestamp("dtime");
+		        this.bill = rs.getInt("bill_id");
+		        this.user = rs.getInt("user");
+		        this.pay_type = rs.getString("pay_type");
+		        this.amount = rs.getFloat("amount");
+		        this.status = rs.getString("status");
+		        
+		        // print the results
+		        //System.out.format("%s, %s, %s, %s, %s, %s\n", id, firstName, lastName, dateCreated, isAdmin, numPoints);
+		      }
+			
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+		 } 	
+	}
+	
+	
 	public Integer getBill() {
 		return bill;
 	}
