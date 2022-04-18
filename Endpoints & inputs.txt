@@ -1,0 +1,17 @@
+++ Payment ++
+
+//Make a payment
+http://localhost:9090/PaymentService/rest/payment/pay 
+JSON:POST:JSON
+
+{
+  "bill": "999",
+  "user": "444",
+  "pay_type": "MasterCard",
+  "amount": "999.99"
+}
+
+//Last transaction
+http://localhost:9090/PaymentService/rest/payment/pay 
+-:GET:JSON
+

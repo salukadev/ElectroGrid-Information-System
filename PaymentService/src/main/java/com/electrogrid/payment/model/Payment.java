@@ -8,10 +8,12 @@ import com.electrogrid.payment.utils.DBConnectionSingleton;
 
 public class Payment {
 	
+	private java.sql.Timestamp dTime;
 	private Integer bill;
 	private Integer user;
 	private String pay_type;
 	private Float amount;
+	private String status;
 	
 	static Connection con = DBConnectionSingleton.getConnection();
 	
@@ -54,7 +56,47 @@ public class Payment {
 	 }
 	 	return output;
 	 }
-
+	
+	public String save()
+	 {
+		String output = "";
+	 try
+	 {
+		 if (con == null)
+		 {return "Error while connecting to the database."; }
+	 
+		 // create a prepared statement
+		 //String query = " insert into items(`itemID`,`itemCode`,`itemName`,`itemPrice`,`itemDesc`)"+ " values (?, ?, ?, ?, ?)";
+		 String query = " insert into payments values (0,?, ?, ?, ?, ?, ?)";
+		 PreparedStatement preparedSt = con.prepareStatement(query);
+		 
+		 //Prepare sql timestamp
+		 final java.util.Date today = new java.util.Date();
+	   	 final java.sql.Timestamp todaySQL = new java.sql.Timestamp(today.getTime());
+		 this.dTime = todaySQL;
+		 this.status = "Processing";
+	   	 
+		 // binding values
+		 preparedSt.setTimestamp(1, todaySQL); //dtime
+		 preparedSt.setInt(2, this.bill); //bill_id
+		 preparedSt.setInt(3, this.user); //user_id
+		 //preparedSt.setDouble(5, Double.parseDouble(price));
+		 preparedSt.setString(4, this.pay_type); //pay_type
+		 preparedSt.setFloat(5, this.amount); //amount
+		 preparedSt.setString(6, this.status); //status
+	 
+		 // execute the statement
+		 preparedSt.execute();
+		 //con.close();
+		 output = "Inserted successfully";
+	 }
+	 catch (Exception e)
+	 {
+		 output = "Error while inserting the item.";
+		 System.err.println(e.getMessage());
+	 }
+	 	return output;
+	 }
 
 	public Integer getBill() {
 		return bill;
@@ -95,13 +137,14 @@ public class Payment {
 		this.amount = amount;
 	}
 
-
-	public static Connection getCon() {
-		return con;
+	public String getdTime() {
+		return dTime.toLocaleString();
 	}
-
-
-	public static void setCon(Connection con) {
-		Payment.con = con;
-	} 
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	
+	
 }

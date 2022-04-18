@@ -2,7 +2,9 @@ package com.electrogrid.payment.service;
 
 import java.io.IOException;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,21 +30,25 @@ public class PaymentService
 		return "Hello world!";
 	 }
 	
-	@GET
-	@Path("/test")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String test() throws JsonParseException, JsonMappingException, IOException
+	@POST
+	@Path("/pay")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String test(String payJSON) throws JsonParseException, JsonMappingException, IOException
 	 {
-		Payment pay = new Payment();
-		String json = "{ \"bill\":\"999\", \"user\":\"189\", \"pay_type\":\"master\",\"amount\":\"120.00\" }";
+		//String json = "{ \"bill\":\"999\", \"user\":\"189\", \"pay_type\":\"master\",\"amount\":\"120.00\" }";
+		//pay.insertItem(101, 01, "Visa", 10.00f);
+		
 		// ObjectMapper instantiation
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		// Deserialization into the `Payment` class
-		Payment payment = objectMapper.readValue(json, Payment.class);
+		Payment payment = objectMapper.readValue(payJSON, Payment.class);
 		
-		//pay.insertItem(101, 01, "Visa", 10.00f);
-		System.out.println(payment.getAmount());
-		return "hello";
+		//Save payment object to DB
+		payment.save();
+		String response = objectMapper.writeValueAsString(payment);
+		System.out.println(response);
+		return response;
 	 }
 } 
