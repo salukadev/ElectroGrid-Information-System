@@ -2,12 +2,16 @@ package com.electrogrid.payment.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.Calendar;
-import java.util.Date;
+
 
 import com.electrogrid.payment.utils.DBConnectionSingleton;
 
 public class Payment {
+	
+	private Integer bill;
+	private Integer user;
+	private String pay_type;
+	private Float amount;
 	
 	static Connection con = DBConnectionSingleton.getConnection();
 	
@@ -49,5 +53,55 @@ public class Payment {
 		 System.err.println(e.getMessage());
 	 }
 	 	return output;
-	 } 
+	 }
+
+
+	public Integer getBill() {
+		return bill;
+	}
+
+
+	public void setBill(Integer bill) {
+		this.bill = bill;
+	}
+
+
+	public Integer getUser() {
+		return user;
+	}
+
+
+	public void setUser(Integer user) {
+		this.user = user;
+	}
+
+
+	public String getPay_type() {
+		return pay_type;
+	}
+
+
+	public void setPay_type(String pay_type) {
+		this.pay_type = pay_type;
+	}
+
+
+	public Float getAmount() {
+		return amount;
+	}
+
+
+	public void setAmount(Float amount) {
+		this.amount = amount;
+	}
+
+
+	public static Connection getCon() {
+		return con;
+	}
+
+
+	public static void setCon(Connection con) {
+		Payment.con = con;
+	} 
 }
