@@ -6,7 +6,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.electrogrid.payment.model.Payment;
-import com.electrogrid.payment.model.Test;
 
 
 @Path("/payment")

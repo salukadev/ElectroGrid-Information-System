@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.electrogrid.payment.utils.DBConnectionSingleton;
-import com.electrogrid.utils.DBconnection;
 
 public class Payment {
 	
