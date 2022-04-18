@@ -1,8 +1,6 @@
 package com.electrogrid.payment.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,7 +17,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 
@@ -85,6 +82,29 @@ public class PaymentService
 		ObjectMapper objectMapper = new ObjectMapper();
 		String response = objectMapper.writeValueAsString(payList);
 		
+		System.out.println(response);
+		return response;
+	}
+	
+	@GET
+	@Path("/id/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getById(@PathParam("id") String id) throws JsonProcessingException 
+	{
+		Integer idInt = Integer.parseInt(id); //get numeric id from uri parameter
+		Payment pay = new Payment();
+		String output = pay.fetchById(idInt); //execute command
+		System.out.println(output);
+		
+		//if entry is not availabe in db
+		if(output==null) {
+			return "Incorrect id!";
+		}
+		
+		//Convert to JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(pay);
+				
 		System.out.println(response);
 		return response;
 	}

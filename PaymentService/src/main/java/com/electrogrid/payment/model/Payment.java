@@ -160,6 +160,7 @@ public class Payment {
 		 } 	
 	}
 	
+	//get recent transactions
 	public ArrayList<Payment> fetchRecentTransactions() {
 		ArrayList<Payment> payList = new ArrayList<Payment>();
 		try
@@ -195,7 +196,7 @@ public class Payment {
 		return payList; 	
 	}
 	
-	//Cancel a transaction using an id
+	//Cancel a transaction using the id
 	public String cancelById(int id) {
 		String output = "";
 		try
@@ -216,6 +217,47 @@ public class Payment {
 			 }
 			 
 			
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+			 output = "Processing Error!";
+		 } 	
+		return output;
+	}
+	
+	//Get transaction using the id
+	public String fetchById(int id) {
+		String output = "";
+		try
+		 {
+			 if (con == null)
+			 {return "Processing Error!"; }
+		 
+			 // create a statement and execute query
+			 String query = "SELECT * FROM payments WHERE id=?";
+			 PreparedStatement pSt = con.prepareStatement(query);
+			 pSt.setInt(1,id);
+			 ResultSet rs = pSt.executeQuery();
+			 
+			 boolean read = false;
+			 
+			 while (rs.next())
+		      {
+				read=true;
+		        this.transId = rs.getInt("id");
+		        this.dTime  = rs.getTimestamp("dtime");
+		        this.bill = rs.getInt("bill_id");
+		        this.user = rs.getInt("user");
+		        this.pay_type = rs.getString("pay_type");
+		        this.amount = rs.getFloat("amount");
+		        this.status = rs.getString("status"); 
+		      }
+			 
+			 if(!read) {
+				 return null;
+			 }
+			 output = "Executed successfully";
 		 }
 		 catch (Exception e)
 		 {
