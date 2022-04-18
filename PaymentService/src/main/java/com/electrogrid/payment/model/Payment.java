@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.electrogrid.payment.utils.DBConnectionSingleton;
 
 
 public class Payment {
-	
+
 	private Integer transId;
 	private java.sql.Timestamp dTime;
 	private Integer bill;
@@ -17,6 +20,20 @@ public class Payment {
 	private String pay_type;
 	private Float amount;
 	private String status;
+	
+	public Payment() {}
+	
+	public Payment(Integer transId, Timestamp dTime, Integer bill, Integer user, String pay_type, Float amount,
+			String status) {
+		super();
+		this.transId = transId;
+		this.dTime = dTime;
+		this.bill = bill;
+		this.user = user;
+		this.pay_type = pay_type;
+		this.amount = amount;
+		this.status = status;
+	}
 	
 	static Connection con = DBConnectionSingleton.getConnection();
 	
@@ -143,6 +160,40 @@ public class Payment {
 		 } 	
 	}
 	
+	public ArrayList<Payment> fetchRecentTransactions() {
+		ArrayList<Payment> payList = new ArrayList<Payment>();
+		try
+		 {
+			 if (con == null)
+			 {return payList; }
+		 
+			 // create a statement and execute query
+			 String query = " SELECT * FROM payments ORDER BY id DESC LIMIT 10;";
+			 Statement st = con.createStatement(); 
+			 ResultSet rs = st.executeQuery(query);
+			 
+			 while (rs.next())
+		      {
+		        this.transId = rs.getInt("id");
+		        this.dTime  = rs.getTimestamp("dtime");
+		        this.bill = rs.getInt("bill_id");
+		        this.user = rs.getInt("user");
+		        this.pay_type = rs.getString("pay_type");
+		        this.amount = rs.getFloat("amount");
+		        this.status = rs.getString("status");
+		        
+		        //create a list of objects from db rows
+		        Payment trans = new Payment(transId,dTime,bill,user,pay_type,amount,status);
+		        payList.add(trans);
+		        
+		      }
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+		 }
+		return payList; 	
+	}
 	
 	public Integer getBill() {
 		return bill;

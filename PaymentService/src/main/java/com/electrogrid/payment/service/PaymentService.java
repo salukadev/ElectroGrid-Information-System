@@ -1,6 +1,9 @@
 package com.electrogrid.payment.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +18,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 
@@ -26,7 +30,6 @@ public class PaymentService
 	@Produces(MediaType.TEXT_PLAIN)
 	public String hello()
 	 {
-		
 		return "Hello world!";
 	 }
 	
@@ -59,10 +62,28 @@ public class PaymentService
 	public String getLastTransaction() throws JsonProcessingException
 	{
 		Payment pay = new Payment();
-		pay.getLastTransaction();
+		pay.getLastTransaction(); //Fetch data from DB
 		
+		//Convert to JSON
 		ObjectMapper objectMapper = new ObjectMapper();
 		String response = objectMapper.writeValueAsString(pay);
+		
+		System.out.println(response);
+		return response;
+	}
+	
+	@GET
+	@Path("/recent")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getRecentTransactions() throws IOException
+	{
+		Payment pay = new Payment();
+		List<Payment> payList = pay.fetchRecentTransactions(); //Fetch data
+		
+		//Convert to JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(payList);
+		
 		System.out.println(response);
 		return response;
 	}
