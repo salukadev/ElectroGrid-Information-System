@@ -195,6 +195,36 @@ public class Payment {
 		return payList; 	
 	}
 	
+	//Cancel a transaction using an id
+	public String cancelById(int id) {
+		String output = "";
+		try
+		 {
+			 if (con == null)
+			 {return "Processing Error!"; }
+		 
+			 // create a statement and execute query
+			 String query = " delete from payments where id=?";
+			 PreparedStatement pSt = con.prepareStatement(query);
+			 pSt.setInt(1,id);
+			 int state = pSt.executeUpdate();
+			 //System.out.println(state);
+			 if(state==0) {
+				 output = "Transaction id "+ id +" already cancelled !";
+			 }else {
+				 output = "Transaction id "+ id +" terminated successfully !";
+			 }
+			 
+			
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+			 output = "Processing Error!";
+		 } 	
+		return output;
+	}
+	
 	public Integer getBill() {
 		return bill;
 	}

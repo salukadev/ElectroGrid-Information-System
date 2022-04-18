@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -84,6 +85,18 @@ public class PaymentService
 		ObjectMapper objectMapper = new ObjectMapper();
 		String response = objectMapper.writeValueAsString(payList);
 		
+		System.out.println(response);
+		return response;
+	}
+	
+	@DELETE
+	@Path("/id/{id}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteById(@PathParam("id") String id) 
+	{
+		Integer idInt = Integer.parseInt(id); //get numeric id from uri parameter
+		Payment pay = new Payment();
+		String response = pay.cancelById(idInt); //execute command
 		System.out.println(response);
 		return response;
 	}
