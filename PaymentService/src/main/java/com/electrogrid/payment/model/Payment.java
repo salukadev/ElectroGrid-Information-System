@@ -2,12 +2,15 @@ package com.electrogrid.payment.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 import com.electrogrid.payment.utils.DBConnectionSingleton;
 
+
 public class Payment {
 	
+	private Integer transId;
 	private java.sql.Timestamp dTime;
 	private Integer bill;
 	private Integer user;
@@ -68,7 +71,7 @@ public class Payment {
 		 // create a prepared statement
 		 //String query = " insert into items(`itemID`,`itemCode`,`itemName`,`itemPrice`,`itemDesc`)"+ " values (?, ?, ?, ?, ?)";
 		 String query = " insert into payments values (0,?, ?, ?, ?, ?, ?)";
-		 PreparedStatement preparedSt = con.prepareStatement(query);
+		 PreparedStatement preparedSt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		 
 		 //Prepare sql timestamp
 		 final java.util.Date today = new java.util.Date();
@@ -86,7 +89,15 @@ public class Payment {
 		 preparedSt.setString(6, this.status); //status
 	 
 		 // execute the statement
-		 preparedSt.execute();
+		 preparedSt.executeUpdate();
+		 
+		 //get autoincremented id
+		 ResultSet rs = preparedSt.getGeneratedKeys();
+         if(rs.next())
+         {
+             this.transId = rs.getInt(1);
+         }
+         
 		 //con.close();
 		 output = "Inserted successfully";
 	 }
@@ -143,6 +154,10 @@ public class Payment {
 	
 	public String getStatus() {
 		return status;
+	}
+
+	public Integer getTransId() {
+		return transId;
 	}
 	
 	

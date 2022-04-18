@@ -34,7 +34,7 @@ public class PaymentService
 	@Path("/pay")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String test(String payJSON) throws JsonParseException, JsonMappingException, IOException
+	public String makePayment(String payJSON) throws JsonParseException, JsonMappingException, IOException
 	 {
 		//String json = "{ \"bill\":\"999\", \"user\":\"189\", \"pay_type\":\"master\",\"amount\":\"120.00\" }";
 		//pay.insertItem(101, 01, "Visa", 10.00f);
@@ -51,4 +51,16 @@ public class PaymentService
 		System.out.println(response);
 		return response;
 	 }
+	
+	@GET
+	@Path("/pay")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getLastTransaction() throws JsonProcessingException
+	{
+		Payment pay = new Payment();
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(pay);
+		return response;
+	}
+	
 } 
