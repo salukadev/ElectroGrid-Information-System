@@ -118,4 +118,44 @@ public class Consumption {
 		 }
 		return consumptionHistory; 
 	}
+	
+		
+	public String consumptionHistoryAllbyAccno(int accno) {
+		String output = "";
+		try
+		 {
+			 if (con == null)
+			 {return "Processing Error!"; }
+		 
+			 // create a statement and execute query
+			 String query = " SELECT * FROM consumption WHERE accNo = ?;";
+			 PreparedStatement prepSt = con.prepareStatement(query);
+			 prepSt.setInt(1,accno);
+			 ResultSet rs = prepSt.executeQuery();
+			 
+			 boolean read = false;
+			 
+			 while (rs.next())
+		      {
+				read=true;
+				this.consumptionId = rs.getInt("consumptionId");
+		        this.accNo  = rs.getInt("accNo");
+		        this.year = rs.getInt("year");
+		        this.month = rs.getInt("month");
+		        this.units = rs.getInt("units");
+		        this.calculatedBal = rs.getFloat("calculatedBal"); 
+		      }
+			 
+			 if(!read) {
+				 return null;
+			 }
+			 output = "Executed successfully";
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+			 output = "Processing Error!";
+		 } 	
+		return output;
+	}
 }
