@@ -1,6 +1,7 @@
 package com.electrogrid.consumption.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -30,12 +31,20 @@ public class ConsumptionService {
 	
 	@GET
 	@Path("/getall")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String consumptionHistoryAll(){
-		Consumption consumption = new Consumption();
-		String output = consumption.consumptionHistoryAll();
-		return output;
+	@Produces(MediaType.APPLICATION_JSON)
+	public String consumptionHistoryAll()throws IOException{
+	{
+		Consumption consumptions = new Consumption();
+		List<Consumption> consumptionList = consumptions.consumptionHistoryAll(); //Fetch data
+		
+		//Convert to JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(consumptionList);
+		
+		System.out.println(response);
+		return response;
 	}
-	
+	}
 
 }
+	
