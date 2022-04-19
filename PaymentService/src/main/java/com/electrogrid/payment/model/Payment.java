@@ -267,6 +267,56 @@ public class Payment {
 		return output;
 	}
 	
+	//update a transaction
+	public Payment updateStatus(int rid, String newStatus)
+	{
+		try
+		 {
+			 if (con == null)
+			 {return null; }
+		 
+			 // create a statement and execute query
+			 String query = "UPDATE payments set status = ? WHERE id = ?";
+			 PreparedStatement pSt = con.prepareStatement(query);
+			 pSt.setString(1,newStatus);
+			 pSt.setInt(2,rid);
+			 pSt.executeUpdate();
+			 
+			 //get affected row
+			 String squery = "SELECT * FROM payments WHERE id = ?";
+			 PreparedStatement spSt = con.prepareStatement(squery);
+			 spSt.setInt(1,rid);
+			 
+			 ResultSet rs = spSt.executeQuery();
+			 boolean read = false;
+			 
+				 while (rs.next())
+			      {
+					read=true;
+			        this.transId = rs.getInt("id");
+			        this.dTime  = rs.getTimestamp("dtime");
+			        this.bill = rs.getInt("bill_id");
+			        this.user = rs.getInt("user");
+			        this.pay_type = rs.getString("pay_type");
+			        this.amount = rs.getFloat("amount");
+			        this.status = rs.getString("status"); 
+			      }
+				 
+				 //if there is an affected row return the object
+				 if(!read) {
+					 return null;
+				 }else {
+					 return this;
+				 }
+			 
+		 }
+		 catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+		 } 
+		return null;
+	}
+	
 	public Integer getBill() {
 		return bill;
 	}

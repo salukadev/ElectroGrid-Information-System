@@ -15,3 +15,31 @@ JSON:POST:JSON
 http://localhost:9090/PaymentService/rest/payment/pay 
 -:GET:JSON
 
+//Get 10 recent transactions
+http://localhost:9090/PaymentService/rest/payment/recent
+-:GET:JSON
+
+//Get transaction by id
+http://localhost:9090/PaymentService/rest/payment/id/12
+-:GET:JSON
+
+//Delete payment by id
+http://localhost:9090/PaymentService/rest/payment/id/12
+-:DELETE:Text
+
+//Update payment status(Act as a webhook for payment gw providers)
+http://localhost:9090/PaymentService/rest/payment/gw_webhook
+JSON:PUT:JSON
+
+[Required headers for authorization]
+token=sliit999
+
+{
+  "id": "21",
+  "status": "Completed"
+}
+
+Returns relevant http status codes depending on the result
+Ex: 200 for success, 400 for errors, 401 for unauthorized access 
+
+
