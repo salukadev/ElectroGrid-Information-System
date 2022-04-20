@@ -167,7 +167,7 @@ public class Payment {
 	}
 	
 	//get recent transactions
-	public ArrayList<Payment> fetchRecentTransactions() {
+	public ArrayList<Payment> fetchRecentTransactions(Integer uid) {
 		ArrayList<Payment> payList = new ArrayList<Payment>();
 		try
 		 {
@@ -175,9 +175,11 @@ public class Payment {
 			 {return payList; }
 		 
 			 // create a statement and execute query
-			 String query = " SELECT * FROM payments ORDER BY id DESC LIMIT 10;";
-			 Statement st = con.createStatement(); 
-			 ResultSet rs = st.executeQuery(query);
+			 String query = "SELECT * FROM payments WHERE user=? ORDER BY id DESC LIMIT 10;";
+			 PreparedStatement spSt = con.prepareStatement(query);
+			 spSt.setInt(1,uid);
+			 
+			 ResultSet rs = spSt.executeQuery();
 			 
 			 while (rs.next())
 		      {

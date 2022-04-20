@@ -15,8 +15,8 @@ JSON:POST:JSON
 http://localhost:9090/PaymentService/rest/payment/pay 
 -:GET:JSON
 
-//Get 10 recent transactions
-http://localhost:9090/PaymentService/rest/payment/recent
+//Get 10 recent transactions of a specific user
+http://localhost:9090/PaymentService/rest/payment/recent/{user-id}
 -:GET:JSON
 
 //Get transaction by id
@@ -43,3 +43,24 @@ Returns relevant http status codes depending on the result
 Ex: 200 for success, 400 for errors, 401 for unauthorized access 
 
 
+++ Billing ++
+
+//Check microservice status
+http://localhost:9090/BillingService/rest/billing/
+
+//Create test entries in bills table (Later,this method will be automatically called once a month, when the consumption service reports/messages aggregated usage for the same month )
+http://localhost:9090/BillingService/rest/billing/new
+
+
+//Get last [x] bills for a specific account
+JSON:SEND:JSON
+
+{
+    "accNo":"199",
+    "length":"2"
+}
+
+
+//Get bill by id 
+http://localhost:9090/BillingService/rest/billing/bill/30
+-:GET:JSON
