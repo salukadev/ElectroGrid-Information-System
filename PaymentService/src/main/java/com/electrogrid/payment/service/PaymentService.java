@@ -33,7 +33,7 @@ public class PaymentService
 	@Produces(MediaType.TEXT_PLAIN)
 	public String hello()
 	 {
-		return "Hello world!";
+		return "Service is active!";
 	 }
 	
 	//
