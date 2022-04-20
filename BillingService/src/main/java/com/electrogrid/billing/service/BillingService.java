@@ -1,6 +1,10 @@
 package com.electrogrid.billing.service;
 
+import java.util.List;
+
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -9,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import com.electrogrid.billing.model.Bill;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Path("/billing")
 public class BillingService {
@@ -51,5 +57,32 @@ public class BillingService {
 		
 	 }
 	
+	@POST
+	@Path("/history")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getHistory(String data) throws JsonProcessingException
+	 {
+		//parse json into JsonObject
+		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+		int id = dataObj.get("accNo").getAsInt();
+		int length = dataObj.get("length").getAsInt();
+				
+			
+		Bill bill = new Bill();
+		List<Bill> objs = bill.getHistory(id, length);
+		
+		if(objs==null) {
+			return "Invalid account number!!";
+		}
+		
+		
+		//Convert to JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(objs);
+				
+		return response;
+		
+	 }
 	
 }
