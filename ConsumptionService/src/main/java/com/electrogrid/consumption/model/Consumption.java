@@ -158,4 +158,74 @@ public class Consumption {
 		 } 	
 		return output;
 	}
+	
+	public float calculateDomesticConsumption(int units) {
+		
+		float output = 0;
+		
+		float c0_30 = (float) 5.21;
+		float c31_60 = (float) 14.52;
+		float c61_90 = (float) 21.33;
+		float c91_120 = (float) 34.12;
+		float c121 = (float) 42.22;
+		
+		if(units<30) {
+			output = (float) (units * c0_30);
+		}else {
+			output = (float) (30 * c0_30);
+			
+			if (units<60) {
+				output += (float) ((units-30) * c31_60);
+			}else {
+				output += (float) (30 * c31_60);
+				
+				if(units < 90) {
+					output += (float) ((units-60) * c61_90);
+				}else {
+					output += (float) (30 * c61_90);
+					
+					if(units < 120) {
+						output += (float) ((units-90) * c91_120);
+					}else {
+						
+						output += (float) (30 * c91_120);
+						output += (float) ((units-120) * c121);
+					}
+				}
+			}
+		}
+		return output;
+	}
+	
+	public String insertConsumption() {
+		String output = "";
+		try {
+			//checking db connection
+			if (con == null)
+			 {
+				return "DB error!"; 
+			}
+			
+			//sql query to insert data
+			String query = " insert into consumption values (?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedSt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+			
+			//bind values
+			preparedSt.setInt(1, this.consumptionId);
+			preparedSt.setInt(2, this.accNo);
+			preparedSt.setFloat(3, this.year);
+			preparedSt.setFloat(4, this.month);
+			preparedSt.setFloat(5, this.units);
+			preparedSt.setFloat(6, this.calculatedBal);
+						
+			preparedSt.execute();
+			
+			output = "New rates inserted successfully";
+			
+		}catch(Exception e) {
+			//output when error occured
+			output = "Insertion failed";
+		}
+		return output;
+	}
 }
