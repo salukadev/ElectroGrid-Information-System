@@ -1,6 +1,7 @@
 package com.electrogrid.consumption.model;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -141,5 +142,41 @@ public class DomesticRates {
 			 output = "No data found";
 		 } 	
 		return output; 
+	}
+	
+	public String insertRate() {
+		
+		String output = "";
+		
+		try {
+			//checking db connection
+			if (con == null)
+			 {
+				return "DB error!"; 
+			}
+			
+			//sql query to insert data
+			String query = " insert into domesticrates values (0,?, ?, ?, ?, ?, ?,?)";
+			PreparedStatement preparedSt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+			
+			//bind values
+			preparedSt.setInt(1, this.year);
+			preparedSt.setInt(2, this.month);
+			preparedSt.setFloat(3, this.c0_30);
+			preparedSt.setFloat(4, this.c31_60);
+			preparedSt.setFloat(5, this.c61_90);
+			preparedSt.setFloat(6, this.c91_120);
+			preparedSt.setFloat(7, this.c121);
+			
+			preparedSt.execute();
+			
+			output = "New rates inserted successfully";
+			
+		}catch(Exception e) {
+			//output when error occured
+			output = "Insertion failed";
+		}
+				
+		return output;
 	}
 }
