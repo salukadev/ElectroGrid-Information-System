@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.electrogrid.billing.utils.DBConnectionSingleton;
+
 
 public class Bill {
 	private Integer billId;
@@ -25,6 +27,7 @@ public class Bill {
 	public Bill(Integer billId, Integer accNo, Integer consumptionId, Date period, Float previousBal, Float calculatedBal, Float totPay,
 			Float totalDue) {
 		super();
+		this.billId = billId;
 		this.accNo = accNo;
 		this.totUnits = consumptionId;
 		this.period = period;
@@ -118,7 +121,59 @@ public class Bill {
 		return output;
 	}
 	
-	//get bill by id
+	//get past bills using accNo
+	public ArrayList<Bill> getHistory(int acNo, int length)
+	{
+		ArrayList<Bill> billList = new ArrayList<Bill>();
+		try
+		 {
+			 if (con == null)
+			 {
+				 System.out.println("DB Error!");
+				 return null; 
+			 }
+		 
+			 // Check for the previous bills of the account
+			 String query = "SELECT * FROM bills WHERE accNo=? ORDER BY period DESC LIMIT ?";
+			 PreparedStatement pSt = con.prepareStatement(query);
+			 pSt.setInt(1,acNo);
+			 pSt.setInt(2,length);
+			 ResultSet rs = pSt.executeQuery();
+			 
+			 boolean read = false;
+			 
+			 while (rs.next())
+		      {
+				read=true;
+				this.billId = rs.getInt("billId") ;
+		        this.accNo = rs.getInt("accNo") ;
+		        this.totUnits = rs.getInt("totUnits");
+		        this.period = rs.getDate("period");
+		        this.previousBal = rs.getFloat("previousBal");
+		        this.calculatedBal = rs.getFloat("calculatedBal");
+		        this.totPay = rs.getFloat("totPay");
+		        this.totalDue = rs.getFloat("totalDue");
+		        
+		        
+		      //create a list of objects from db rows
+		        Bill bill = new Bill(billId,accNo,totUnits,period,previousBal,calculatedBal,totPay,totalDue);
+		        billList.add(bill);
+		      }
+			 
+			 if(read) {
+				 System.out.println("Reading past bills");
+				 return billList;
+			 }
+			 
+		 }catch (Exception e)
+		 {
+			 System.err.println(e.getMessage());
+			 System.out.println("Error Reading past bills");
+		 }
+		System.out.println("No account");
+		return null; 	
+	}
+	
 	public Bill getBillById(int bid)
 	{
 		try
