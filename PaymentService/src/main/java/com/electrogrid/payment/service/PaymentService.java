@@ -76,12 +76,13 @@ public class PaymentService
 	}
 	
 	@GET
-	@Path("/recent")
+	@Path("/recent/{uid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getRecentTransactions() throws IOException
+	public String getRecentTransactions(@PathParam("uid") String uid) throws IOException
 	{
+		Integer uId = Integer.parseInt(uid);
 		Payment pay = new Payment();
-		List<Payment> payList = pay.fetchRecentTransactions(); //Fetch data
+		List<Payment> payList = pay.fetchRecentTransactions(uId); //Fetch data
 		
 		//Convert to JSON
 		ObjectMapper objectMapper = new ObjectMapper();
