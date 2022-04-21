@@ -151,8 +151,33 @@ public class User {
 	}
 	
 	// deleting a user
-	public String deleteUser() {
-		return "";
+	public String deleteUser(int userId) {
+		String output = "";
+		try{
+			 if (con == null){
+				 return "Processing Error!"; 
+			 }
+		 
+			 // create a statement and execute query
+			 String query = "delete from users where userId=?";
+			 PreparedStatement preparedStatement = con.prepareStatement(query);
+			 preparedStatement.setInt(1,userId);
+			 int state = preparedStatement.executeUpdate();
+			 //System.out.println(state);
+			 if(state==0) {
+				 output = "User with Account No :"+ userId +" does not exist!";
+			 }else {
+				 output = "User with the Account No :"+ userId +" is Deleted successfully !";
+			 }
+			 
+			
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+			output = "Processing Error!";
+		} 	
+		return output;
 	}
 	
 	// user login
