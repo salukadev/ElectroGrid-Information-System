@@ -68,5 +68,19 @@ public class UserService {
 		return response;
 		
 	}
+	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String userLogin(String userJSON) {
+		
+		User user = new User();
+		JsonObject jsonObject = new JsonParser().parse(userJSON).getAsJsonObject();
+		String username = jsonObject.get("username").getAsString();
+		String password = jsonObject.get("password").getAsString();
+		
+		return user.userlogin(username, password);
+	}
 
 }

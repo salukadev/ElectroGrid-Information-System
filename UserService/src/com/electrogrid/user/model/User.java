@@ -2,6 +2,8 @@ package com.electrogrid.user.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 import com.electrogrid.user.utils.DBConnectionSingleton;
 
@@ -181,8 +183,35 @@ public class User {
 	}
 	
 	// user login
-	public String userlogin() {
-		return "";
+	public String userlogin(String username, String password) {
+		String output ="";
+		try {
+			
+			if (con == null){
+				 return "Processing Error!"; 
+			}
+			
+			String query = "SELECT username, password FROM users";
+			Statement statement = con.createStatement(); 
+			ResultSet rs = statement.executeQuery(query);
+			
+			while(rs.next()) {
+				String uname = rs.getString("username");
+				String pswd = rs.getString("password");
+				
+				if(username.equals(uname) && password.equals(pswd)) {
+					output = "user authenticated";
+				}
+				else{
+					output = "Incorrect username or password";
+				}
+				
+			}
+		}
+		catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return output;
 	}
 	
 	// change user Password
