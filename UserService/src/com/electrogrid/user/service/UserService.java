@@ -2,7 +2,9 @@ package com.electrogrid.user.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -31,6 +33,27 @@ public class UserService {
 		user.setNic(jsonObject.get("nic").getAsString());
 			
 		return user.registerUser();
+	}
+	
+	@PUT
+	@Path("/editUser/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editUserbyId(@PathParam("id") String id, String userJSON) {
+		User user = new User();
+
+		JsonObject jsonObject = new JsonParser().parse(userJSON).getAsJsonObject();
+		//Read the values from the JSON object
+		int userId = Integer.parseInt(id);
+		String username = jsonObject.get("username").getAsString();
+		String email = jsonObject.get("email").getAsString();
+		String password = jsonObject.get("password").getAsString();
+		int accNo = jsonObject.get("accNo").getAsInt();
+		int phone = jsonObject.get("phone").getAsInt();
+		String nic = jsonObject.get("nic").getAsString();
+		
+		String response = user.editUser(userId,username,email,password,phone,accNo,nic);
+		return response;
 	}
 
 }
