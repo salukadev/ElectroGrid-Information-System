@@ -1,6 +1,7 @@
 package com.electrogrid.user.service;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -54,6 +55,18 @@ public class UserService {
 		
 		String response = user.editUser(userId,username,email,password,phone,accNo,nic);
 		return response;
+	}
+	
+	@DELETE
+	@Path("/deleteUser/{id}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteById(@PathParam("id") String id) {
+		Integer accNoInt = Integer.parseInt(id); //get numeric id from uri parameter
+		User user = new User();
+		String response = user.deleteUser(accNoInt); //execute command
+		System.out.println(response);
+		return response;
+		
 	}
 
 }
