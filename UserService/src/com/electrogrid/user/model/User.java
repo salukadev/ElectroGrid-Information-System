@@ -117,8 +117,37 @@ public class User {
 	}
 	
 	// updating user details
-	public String editUser() {
-		return "";
+	public String editUser(int userId, String username, String email, String password, int phone_no, int accNo, String nic) {
+		
+		String output = ""; 
+		try
+		{ 
+			if (con == null) 
+			{
+				return "Error while connecting to the database for updating."; 
+			} 
+			// create a prepared statement
+			String query = "UPDATE users SET username=?, email=?, password=?, phone_no=?,accNo=?, nic=? WHERE userId=?"; 
+			PreparedStatement preparedStatement = con.prepareStatement(query); 
+			// binding values
+		   	preparedStatement.setString(1, username); //username
+		   	preparedStatement.setString(2, email); //email
+		   	preparedStatement.setString(3, password); //password
+		   	preparedStatement.setInt(4, phone_no); //area
+		   	preparedStatement.setInt(5, accNo); //accNo
+		   	preparedStatement.setString(6, nic); //nic number
+		   	preparedStatement.setInt(7, userId);
+		   	
+			// execute the statement
+		   	preparedStatement.execute(); 
+			output = "User details Updated successfully"; 
+		} 
+		catch (Exception e) 
+		{ 
+			output = "Error while updating the user details."; 
+			System.err.println(e.getMessage()); 
+		} 
+		return output;
 	}
 	
 	// deleting a user
