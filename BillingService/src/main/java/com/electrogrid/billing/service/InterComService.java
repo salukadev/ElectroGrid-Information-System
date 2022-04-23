@@ -2,7 +2,6 @@ package com.electrogrid.billing.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
@@ -20,7 +19,7 @@ public class InterComService {
 	@POST
 	@Path("/billpay")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void updatePayInfo(String data) throws JsonProcessingException
+	public String updatePayInfo(String data) throws JsonProcessingException
 	 {
 		//parse json into JsonObject
 		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
@@ -30,7 +29,7 @@ public class InterComService {
 			
 		Bill bill = new Bill();
 		bill.updateBillPayment(id, amount);  //update payment balances
-			
+		return "Updated Bill!";
 	 }
 	
 
