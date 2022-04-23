@@ -3,6 +3,7 @@ package com.electrogrid.payment.service;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.text.html.parser.Entity;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -22,7 +24,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.ClientResponse;
 
 
 @Path("/payment")
@@ -54,9 +58,28 @@ public class PaymentService
 		
 		//Save payment object to DB
 		payment.save();
-		String response = objectMapper.writeValueAsString(payment);
+		
+		//notify billing service about the payment 
+		String URI = "http://localhost:8080/BillingService/rest/intercom/billpay";
+		String inputJson = String.format("{\"billId\": %s, \"amount\": %s}", payment.getBill().toString(), payment.getAmount().toString());
+				
+		Client client = Client.create();
+		WebResource wRsc = client.resource(URI);
+		ClientResponse response = wRsc.type("application/json").post(ClientResponse.class, inputJson);
+		
+		if (response.getStatus() != 200) {
+			   throw new RuntimeException("Failed : HTTP error code : "
+				+ response.getStatus());
+			}
+		//end of inter-service com
+		
+		//print intercom response
+		String output = response.getEntity(String.class);
+		System.out.println(output);
+		
+		String resp = objectMapper.writeValueAsString(payment);
 		System.out.println(response);
-		return response;
+		return resp;
 	 }
 	
 	@GET
