@@ -121,6 +121,46 @@ public class Complaint {
 			return compList; 	
 		}
 		
+		//Get specific complaint using the id
+		public String fetchById(int id) {
+			String output = "";
+			try
+			 {
+				 if (con == null)
+				 {return "Processing Error!"; }
+			 
+				 // create a statement and execute query
+				 String query = "SELECT * FROM complaints WHERE compId=?";
+				 PreparedStatement pSt = con.prepareStatement(query);
+				 pSt.setInt(1,id);
+				 ResultSet rs = pSt.executeQuery();
+				 
+				 boolean read = false;
+				 
+				 while (rs.next())
+			      {
+					read=true;
+					this.compId = rs.getInt("compId");
+					this.user = rs.getInt("user");
+					this.dTime  = rs.getTimestamp("date");
+					this.title = rs.getString("title");
+					this.description = rs.getString("description");
+			         
+			      }
+				 
+				 if(!read) {
+					 return null;
+				 }
+				 output = "Executed successfully";
+			 }
+			 catch (Exception e)
+			 {
+				 System.err.println(e.getMessage());
+				 output = "Processing Error!";
+			 } 	
+			return output;
+		}
+		
 		//Cancel a complaint using the id
 		public String cancelById(int id) {
 			String output = "";

@@ -69,6 +69,29 @@ public class ComplaintService
 		return response;
 	}
 	
+	@GET
+	@Path("/view/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getById(@PathParam("id") String id) throws JsonProcessingException 
+	{
+		Integer idInt = Integer.parseInt(id); //get numeric id from uri parameter
+		Complaint comp = new Complaint();
+		String output = comp.fetchById(idInt); //execute command
+		System.out.println(output);
+		
+		//if entry is not availabe in db
+		if(output==null) {
+			return "Incorrect id!";
+		}
+		
+		//Convert to JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		String response = objectMapper.writeValueAsString(comp);
+				
+		System.out.println(response);
+		return response;
+	}
+	
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.TEXT_PLAIN)
