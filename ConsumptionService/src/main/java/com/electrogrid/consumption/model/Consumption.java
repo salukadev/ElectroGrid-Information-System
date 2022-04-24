@@ -197,7 +197,7 @@ public class Consumption {
 		return output;
 	}
 	
-	public String insertConsumption() {
+	public String insertConsumption(int consumptionId, int accNo, int year, int month, int units) {
 		String output = "";
 		try {
 			//checking db connection
@@ -210,22 +210,57 @@ public class Consumption {
 			String query = " insert into consumption values (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedSt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 			
+			float calbal = calculateDomesticConsumption(units);
 			//bind values
-			preparedSt.setInt(1, this.consumptionId);
-			preparedSt.setInt(2, this.accNo);
-			preparedSt.setFloat(3, this.year);
-			preparedSt.setFloat(4, this.month);
-			preparedSt.setFloat(5, this.units);
-			preparedSt.setFloat(6, this.calculatedBal);
-						
-			preparedSt.execute();
+			preparedSt.setInt(1, consumptionId);
+			preparedSt.setInt(2, accNo);
+			preparedSt.setFloat(3, year);
+			preparedSt.setFloat(4, month);
+			preparedSt.setFloat(5, units);
+			preparedSt.setFloat(6, calbal);
 			
+			//execute sql query to store values in db
+			preparedSt.execute();
 			output = "New rates inserted successfully";
 			
 		}catch(Exception e) {
 			//output when error occured
+			System.out.println(consumptionId);
 			output = "Insertion failed";
 		}
+		return output;
+	}
+	
+	public String updateUnits(int accNo,int year, int month, int units) {
+		String output = "";
+		
+		try {
+			//checking db connection
+			if (con == null)
+			 {
+				return "DB error!"; 
+			 }
+			
+			
+			String query = "UPDATE consumption SET units = ?, calculatedBal = ? WHERE accNo = ? AND year = ? AND month = ?";
+			PreparedStatement preparedSt = con.prepareStatement(query);
+			
+			// calculate balance for new no units entry
+			float bal = calculateDomesticConsumption(units);
+			
+			preparedSt.setInt(1,units);
+			preparedSt.setFloat(2,bal);
+			preparedSt.setInt(3,accNo);
+			preparedSt.setInt(4,year);
+			preparedSt.setInt(5,month);
+			
+			preparedSt.executeUpdate();
+			
+		}catch(Exception e) {
+			//output when error occured
+			output = "Update failed";
+		}
+		
 		return output;
 	}
 }
