@@ -180,5 +180,34 @@ public class DomesticRates {
 		return output;
 	}
 	
-	
+	public String Delete(int rateId) {
+		String output = "";
+		
+		try {
+			//checking db connection
+			if (con == null)
+			 {
+				return "DB error!"; 
+			}
+			
+			//sql query to insert data
+			String query = " DELETE FROM domesticRates WHERE rateId=?";
+			PreparedStatement preparedSt = con.prepareStatement(query);
+			
+			//bind values
+			preparedSt.setInt(1, rateId);
+			
+			preparedSt.executeUpdate();
+			
+			output = "Deleted rate successfully";
+			
+		}catch(Exception e) {
+			//output when error occured
+			output = "Delete failed";
+		}
+		
+		return output;
+	}
 }
+
+	
