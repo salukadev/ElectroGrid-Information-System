@@ -22,6 +22,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Path("/consumption")
 public class ConsumptionService {
@@ -73,5 +75,52 @@ public class ConsumptionService {
 		System.out.println(response);
 		return response;
 	}
+	
+	@POST
+	@Path("/addconsumption")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void newconsumtion(String data) throws JsonProcessingException
+	 {
+		//parse json into JsonObject
+		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+		int cId = dataObj.get("consumptionId").getAsInt();
+		int acc = dataObj.get("accNo").getAsInt();
+		int year = dataObj.get("year").getAsInt();
+		int month = dataObj.get("month").getAsInt();
+		int units = dataObj.get("units").getAsInt();
+		
+		Consumption cons = new Consumption();
+		
+		//float cal = cons.calculateDomesticConsumption(units);
+		System.out.println(cId);
+		
+		cons.insertConsumption(cId, acc, year, month, units);
+				
+		
+		
+	 }
+	
+	
+	@POST
+	@Path("/updateunits")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateConsumedUnits(String data) throws JsonProcessingException
+	 {
+		//parse json into JsonObject
+		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+		int acc = dataObj.get("accNo").getAsInt();
+		int year = dataObj.get("year").getAsInt();
+		int month = dataObj.get("month").getAsInt();
+		int units = dataObj.get("units").getAsInt();
+		
+		Consumption cons = new Consumption();
+		
+		cons.updateUnits(acc, year, month, units);
+		
+		System.out.println(cons.updateUnits(acc, year, month, units));
+		
+	 }
+
+	
 }
 	
