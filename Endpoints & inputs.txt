@@ -64,3 +64,13 @@ JSON:SEND:JSON
 //Get bill by id 
 http://localhost:9090/BillingService/rest/billing/bill/30
 -:GET:JSON
+
+
+//Update bill after a payment
+http://localhost:9090/BillingService/rest/billing/bill
+JSON:PUT:-
+
+{
+    "billId":3,
+    "amount":1000.7
+}
