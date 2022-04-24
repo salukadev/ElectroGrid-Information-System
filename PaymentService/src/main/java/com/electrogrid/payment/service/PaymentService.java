@@ -3,7 +3,6 @@ package com.electrogrid.payment.service;
 import java.io.IOException;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
