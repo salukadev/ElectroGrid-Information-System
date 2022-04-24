@@ -10,11 +10,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.electrogrid.consumption.model.Consumption;
 import com.electrogrid.consumption.model.DomesticRates;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Path("/domestic")
 public class DomesticRatesService {
@@ -65,5 +68,22 @@ public class DomesticRatesService {
 		String response = objectMapper.writeValueAsString(domesticrates);
 		System.out.println(response);
 		return response;
+	 }
+	
+	
+	@POST
+	@Path("/deleterate/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String Delete(@PathParam("id") String id)
+	 {
+				
+		
+		Integer rateID = Integer.parseInt(id);
+		DomesticRates rate = new DomesticRates();
+		
+		String output =rate.Delete(rateID);
+
+		return output;
 	 }
 }
