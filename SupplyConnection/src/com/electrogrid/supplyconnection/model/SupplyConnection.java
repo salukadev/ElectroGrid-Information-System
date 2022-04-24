@@ -206,13 +206,7 @@ public class SupplyConnection {
 		} 	
 		return output;
 	}
-		
-		
-	//view single connection
-	public String viewSingleConnection() {
-		return "";
-	}
-		
+			
 		
 	//view all the connections
 	public ArrayList<SupplyConnection> viewAllConnections() {
@@ -247,20 +241,5 @@ public class SupplyConnection {
 		return SupplyConnectionList;
 	}
 		
-		
-	//view all "UP" connections
-	public String viewUpConnections() {
-		return "";
-	}
-		
-	//view all "DOWN" connections
-	public String viewDownConnections() {
-		return "";
-	}
-		
-	//change password
-	public String changePassword() {
-		return "";
-	}
 
 }
