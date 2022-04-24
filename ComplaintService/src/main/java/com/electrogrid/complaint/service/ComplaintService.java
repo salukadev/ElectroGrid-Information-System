@@ -93,7 +93,7 @@ public class ComplaintService
 	}
 	
 	@DELETE
-	@Path("/{id}")
+	@Path("/delete/{id}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String deleteById(@PathParam("id") String id) 
 	{
