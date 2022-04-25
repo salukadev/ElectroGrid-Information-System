@@ -31,7 +31,7 @@ public class RecurringPayService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String createRecPayment(String payJSON) throws JsonParseException, JsonMappingException, IOException
 	 {
-	
+		
 		// ObjectMapper instantiation
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -59,10 +59,10 @@ public class RecurringPayService {
 		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
 		int id = dataObj.get("id").getAsInt();
 		float amount = dataObj.get("amount").getAsFloat();
-		String dateStr = dataObj.get("status").getAsString();
+		String dateStr = dataObj.get("until").getAsString();
 		
 		//DD-MM-YYYY
-		SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date date = sdf1.parse(dateStr);
 		java.sql.Date sqlUntilDate = new java.sql.Date(date.getTime());  
 		
@@ -86,13 +86,13 @@ public class RecurringPayService {
 	 }
 	
 	@GET
-	@Path("/record/{id}")
+	@Path("/record/{accNo}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getLastTransaction(@PathParam("id") String id) throws JsonProcessingException
+	public String getLastTransaction(@PathParam("accNo") String accno) throws JsonProcessingException
 	{
-		Integer idInt = Integer.parseInt(id); //get numeric id from uri parameter
+		Integer accNo = Integer.parseInt(accno); //get numeric id from uri parameter
 		
-		RecurringPay recPay = new RecurringPay().getRecPayByAcc(idInt); //read from db
+		RecurringPay recPay = new RecurringPay().getRecPayByAcc(accNo); //read from db
 		
 		//Convert to JSON
 		ObjectMapper objectMapper = new ObjectMapper();
