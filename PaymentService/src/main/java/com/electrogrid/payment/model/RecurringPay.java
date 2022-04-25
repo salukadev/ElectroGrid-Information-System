@@ -79,12 +79,15 @@ public class RecurringPay {
 	 }
 	
 	//Get rec pay using the acc number
-	public String getRecPayByAcc(int id) {
+	public RecurringPay getRecPayByAcc(int id) {
 		String output = "";
 		try
 		 {
 			 if (con == null)
-			 {return "Processing Error!"; }
+			 {
+				 System.out.println("DB Error!");
+				 return null;
+			 }
 		 
 			 // create a statement and execute query
 			 String query = "SELECT * FROM recurring_pay WHERE bill_account=?";
@@ -110,13 +113,14 @@ public class RecurringPay {
 				 return null;
 			 }
 			 output = "Executed successfully";
+			 System.out.println(output);
 		 }
 		 catch (Exception e)
 		 {
 			 System.err.println(e.getMessage());
-			 output = "Processing Error!";
+			 return null;
 		 } 	
-		return output;
+		return this;
 	}
 	
 	//Cancel a recurring payment using the id
