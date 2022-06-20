@@ -1,4 +1,4 @@
-++ Payment ++
+++++++++++++++++++++++++ Payment ++++++++++++++++++++++++++
 
 //Make a payment
 http://localhost:9090/PaymentService/rest/payment/pay 
@@ -43,7 +43,9 @@ Returns relevant http status codes depending on the result
 Ex: 200 for success, 400 for errors, 401 for unauthorized access 
 
 
-++ Billing ++
++++++++++++++++++++ Billing +++++++++++++++++++++++++++++
+Uses 'bills' table under the database 'eg_general'
+
 
 //Check microservice status
 http://localhost:9090/BillingService/rest/billing/
