@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -82,6 +83,23 @@ public class BillingService {
 		String response = objectMapper.writeValueAsString(objs);
 				
 		return response;
+		
+	 }
+	
+	@PUT
+	@Path("/bill")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updatePayInfo(String data) throws JsonProcessingException
+	 {
+		//parse json into JsonObject
+		JsonObject dataObj = new JsonParser().parse(data).getAsJsonObject();
+		int id = dataObj.get("billId").getAsInt();
+		float amount = dataObj.get("amount").getAsFloat();
+				
+			
+		Bill bill = new Bill();
+		bill.updateBillPayment(id, amount);  //update payment balances
+		
 		
 	 }
 	

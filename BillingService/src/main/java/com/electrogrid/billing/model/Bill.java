@@ -100,7 +100,7 @@ public class Bill {
 				 preparedSt.setInt(1, accNo); //accNo
 				 preparedSt.setInt(2, units);  //totUnits
 				 preparedSt.setDate(3, sqlToday);  //period
-				 preparedSt.setFloat(4, this.totalDue); //set prev month's DUes to previousBal
+				 preparedSt.setFloat(4, this.totalDue); //set prev month's due to previousBal
 				 preparedSt.setFloat(5, amount); //calculatedBal for this month
 				 preparedSt.setFloat(6, 0f); //totPay
 				 preparedSt.setFloat(7, this.totalDue+amount); //totalDue {prevBal + this month bill}
@@ -217,6 +217,66 @@ public class Bill {
 		return null; 	
 	}
 	
+	//method used to update payment info after a transaction
+	public void updateBillPayment(int billid, float amount) 
+	{
+		try
+		 {
+			 if (con == null)
+			 {
+				 System.out.println("DB Error!");
+				 return; 
+			 }
+		 
+			 // Get last bill
+			 String query = "SELECT * FROM bills WHERE billId=? ORDER BY period DESC LIMIT 1";
+			 PreparedStatement pSt = con.prepareStatement(query);
+			 pSt.setInt(1,billid);
+			 
+			 ResultSet rs = pSt.executeQuery();
+			 
+			 boolean read = false;
+			 
+			 while (rs.next())
+		      {
+				read=true;
+				this.billId = rs.getInt("billId") ;
+		        this.accNo = rs.getInt("accNo") ;
+		        this.totUnits = rs.getInt("totUnits");
+		        this.period = rs.getDate("period");
+		        this.previousBal = rs.getFloat("previousBal");
+		        this.calculatedBal = rs.getFloat("calculatedBal");
+		        this.totPay = rs.getFloat("totPay");
+		        this.totalDue = rs.getFloat("totalDue");
+		      }
+			 
+			 if(read) {
+				 System.out.println("Bill found. Updating payment info...");
+				 
+				 try {
+					 
+					 String queryIn = "UPDATE bills set totPay = ? , totalDue= ? WHERE billId = ?"; 
+					 PreparedStatement preparedSt = con.prepareStatement(queryIn);
+					 
+					// binding values
+					 preparedSt.setFloat(1, this.totPay+ amount); //update totPay
+					 preparedSt.setFloat(2, this.totalDue-amount); //update totalDue
+					 preparedSt.setInt(3, this.billId); //billId
+					 
+					// execute the statement
+					 preparedSt.executeUpdate();
+					 System.out.println("Updated payment info for the last month");
+					 
+				 }catch(Exception e) {
+					 System.out.println(e);
+				 }
+			 }
+		 
+		 }catch(Exception e) {
+			 
+		 }
+		return;
+	}
 	//getters and setters
 	public Integer getBillId() {
 		return billId;
